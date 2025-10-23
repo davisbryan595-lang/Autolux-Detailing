@@ -26,15 +26,7 @@ export default function Hero() {
       <div
         className={`relative z-10 text-center max-w-4xl mx-auto px-4 transition-all duration-1000 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"}`}
       >
-        <div className="mb-8 animate-fade-in flex justify-center">
-          <Image
-            src="/logo.png"
-            alt="AutoLux Detailing Logo"
-            width={200}
-            height={200}
-            className="h-32 w-auto drop-shadow-2xl"
-          />
-        </div>
+        
 
         <div className="mb-6 animate-fade-in">
           <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-4 text-glow">Luxury Detailing</h1>
