@@ -1,3 +1,8 @@
+"use client";
+
+import Image from "next/image";
+import { motion } from "framer-motion";
+
 export default function PageLoader() {
   return (
     <div className="fixed inset-0 bg-background z-[9999] flex items-center justify-center">
@@ -13,19 +18,28 @@ export default function PageLoader() {
 
         {/* Inner circle */}
         <div className="absolute inset-4 bg-primary/20 rounded-full flex items-center justify-center">
-          <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
-        </div>
-
-        {/* Center text */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-primary font-bold text-sm">AL</span>
+          {/* Moving Logo */}
+          <motion.div
+            animate={{ scale: [1, 1.1, 1] }}
+            transition={{ repeat: Infinity, duration: 1.5 }}
+          >
+            <Image
+              src="/logo.png" // <-- your logo path
+              alt="AutoLux Logo"
+              width={40}
+              height={40}
+              className="rounded-full"
+            />
+          </motion.div>
         </div>
       </div>
 
       {/* Loading text */}
       <div className="absolute bottom-20 text-center">
-        <p className="text-primary font-semibold">Loading...</p>
+        <p className="text-primary font-semibold tracking-wide animate-pulse">
+          Loading...
+        </p>
       </div>
     </div>
-  )
+  );
 }
