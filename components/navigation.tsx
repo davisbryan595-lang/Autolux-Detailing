@@ -20,8 +20,8 @@ export default function Navigation() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           <a href="#home" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-            <Image src="/logo.png" width={50} height={50} className="h-12 w-auto" />
-            <span className="text-xl font-bold text-primary hidden sm:inline">AutoLux</span>
+            <Image src="/logo.png" alt="AutoLux Detailing" width={50} height={50} className="h-12 w-auto" />
+
           </a>
 
           {/* Desktop Menu */}
