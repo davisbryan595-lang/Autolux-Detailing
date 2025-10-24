@@ -63,7 +63,9 @@ export default function Contact() {
               </div>
               <div>
                 <h3 className="text-xl font-bold text-foreground mb-2">Email</h3>
-                <p className="text-foreground/70">info@autoluxdetailing.com</p>
+                <a href="mailto:info@autoluxdetailing.com" className="text-foreground/70 hover:text-primary transition-colors">
+                  info@autoluxdetailing.com
+                </a>
               </div>
             </div>
           </div>
