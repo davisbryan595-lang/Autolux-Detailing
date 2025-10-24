@@ -41,7 +41,9 @@ export default function Contact() {
               </div>
               <div>
                 <h3 className="text-xl font-bold text-foreground mb-2">Phone</h3>
-                <p className="text-foreground/70">208-318-4160</p>
+                <a href="tel:208-318-4160" className="text-foreground/70 hover:text-primary transition-colors">
+                  208-318-4160
+                </a>
               </div>
             </div>
 
