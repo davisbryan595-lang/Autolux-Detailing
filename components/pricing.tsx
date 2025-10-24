@@ -7,7 +7,7 @@ const pricingPlans = [
     name: "Exterior",
     price: "$50-70",
     description: "Perfect for maintaining your car's exterior",
-    features: ["Wash & dry", "Clay bar treatment", "Wax application", "Tire shine", "Window cleaning"],
+    features: ["Wash & dry", "Wax application", "Tire shine", "Door jambs", "Window cleaning"],
     highlighted: false,
   },
   {
