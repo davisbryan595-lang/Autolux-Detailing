@@ -1,4 +1,4 @@
-
+"use client";
 
 import { useState, useEffect } from "react"
 import Navigation from "@/components/navigation"
@@ -15,7 +15,6 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    // Simulate page load
     const timer = setTimeout(() => setIsLoading(false), 2000)
     return () => clearTimeout(timer)
   }, [])
@@ -23,14 +22,18 @@ export default function Home() {
   return (
     <>
       {isLoading && <PageLoader />}
-      <SpecialOfferPopup />
-      <Navigation />
-      <Hero />
-      <Services />
-      <Gallery />
-      <Pricing />
-      <Contact />
-      <Footer />
+      {!isLoading && (
+        <>
+          <SpecialOfferPopup />
+          <Navigation />
+          <Hero />
+          <Services />
+          <Gallery />
+          <Pricing />
+          <Contact />
+          <Footer />
+        </>
+      )}
     </>
   )
 }
