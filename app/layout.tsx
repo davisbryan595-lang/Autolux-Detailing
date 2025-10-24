@@ -3,7 +3,7 @@ import type { Metadata } from "next"
 import { Geist, Geist_Mono } from "next/font/google"
 import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
-import Loader from "@/components/page-Loader";
+import PageLoader from "@/components/page-loader";
 
 const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
@@ -28,7 +28,7 @@ export default function RootLayout({
       </body>
     </html>
     
-    import Loader from "@/components/Loader";
+    import PageLoader from "@/components/page-loader";
 
 export default function Loading() {
   return <Loader />;
