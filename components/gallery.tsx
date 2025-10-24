@@ -70,7 +70,7 @@ export default function Gallery() {
               >
                 <div className="text-center">
                   <h3 className="text-2xl font-bold text-primary mb-4">{item.title}</h3>
-                  <button className="px-6 py-2 bg-primary text-primary-foreground rounded-lg font-semibold hover:shadow-lg transition-all">
+                  <button onClick={() => setSelectedId(item.id)} className="px-6 py-2 bg-primary text-primary-foreground rounded-lg font-semibold hover:shadow-lg transition-all">
                     View Details
                   </button>
                 </div>
