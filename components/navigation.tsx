@@ -15,6 +15,13 @@ export default function Navigation() {
     { label: "Contact", href: "#contact" },
   ]
 
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId)
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" })
+    }
+  }
+
   return (
     <nav className="fixed top-0 w-full bg-background/95 backdrop-blur-md border-b border-border z-50 glow-gold">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
