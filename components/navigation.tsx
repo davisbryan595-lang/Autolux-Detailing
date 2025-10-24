@@ -46,7 +46,7 @@ export default function Navigation() {
 
           {/* CTA Button */}
           <div className="hidden md:block">
-            <button className="px-6 py-2 bg-primary text-primary-foreground rounded-lg font-semibold hover:shadow-lg glow-gold-hover transition-all duration-300">
+            <button onClick={() => scrollToSection("contact")} className="px-6 py-2 bg-primary text-primary-foreground rounded-lg font-semibold hover:shadow-lg glow-gold-hover transition-all duration-300">
               Get a Quote
             </button>
           </div>
