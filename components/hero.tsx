@@ -11,6 +11,13 @@ export default function Hero() {
     setIsVisible(true)
   }, [])
 
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId)
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" })
+    }
+  }
+
   return (
     <section id="home" className="relative w-full h-screen flex items-center justify-center overflow-hidden pt-20">
       {/* Video Background */}
