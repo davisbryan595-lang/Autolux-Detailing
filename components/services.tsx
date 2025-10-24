@@ -8,7 +8,7 @@ const services = [
     title: "Exterior Detailing",
     description: "Professional exterior cleaning and protection for a showroom shine",
     price: "$50-70",
-    features: ["Wheel cleaning", "Trim restoration"],
+    features: ["Wheel cleaning", "Trim restoration", "Tire shine", "Door jambs"],
   },
   {
     icon: Droplet,
