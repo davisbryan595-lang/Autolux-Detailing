@@ -70,7 +70,7 @@ export default function Navigation() {
                 {item.label}
               </a>
             ))}
-            <button className="w-full px-4 py-2 bg-primary text-primary-foreground rounded-lg font-semibold hover:shadow-lg transition-all">
+            <button onClick={() => { scrollToSection("contact"); setIsOpen(false); }} className="w-full px-4 py-2 bg-primary text-primary-foreground rounded-lg font-semibold hover:shadow-lg transition-all">
               Get a Quote
             </button>
           </div>
