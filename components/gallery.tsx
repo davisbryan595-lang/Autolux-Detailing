@@ -37,6 +37,7 @@ const galleryImages = [
 
 export default function Gallery() {
   const [hoveredId, setHoveredId] = useState<number | null>(null)
+  const [selectedId, setSelectedId] = useState<number | null>(null)
 
   return (
     <section id="gallery" className="py-20 px-4 bg-background">
