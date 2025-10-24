@@ -71,7 +71,7 @@ export default function Services() {
                   ))}
                 </ul>
 
-                <button className="w-full py-3 bg-primary text-primary-foreground rounded-lg font-semibold hover:shadow-lg glow-gold-hover transition-all duration-300">
+                <button onClick={() => scrollToSection("contact")} className="w-full py-3 bg-primary text-primary-foreground rounded-lg font-semibold hover:shadow-lg glow-gold-hover transition-all duration-300">
                   Get a Quote
                 </button>
               </div>
