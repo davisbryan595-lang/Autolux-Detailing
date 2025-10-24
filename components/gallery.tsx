@@ -37,6 +37,7 @@ const galleryImages = [
 
 export default function Gallery() {
   const [hoveredId, setHoveredId] = useState<number | null>(null)
+  const [selectedId, setSelectedId] = useState<number | null>(null)
 
   return (
     <section id="gallery" className="py-20 px-4 bg-background">
@@ -69,7 +70,7 @@ export default function Gallery() {
               >
                 <div className="text-center">
                   <h3 className="text-2xl font-bold text-primary mb-4">{item.title}</h3>
-                  <button className="px-6 py-2 bg-primary text-primary-foreground rounded-lg font-semibold hover:shadow-lg transition-all">
+                  <button onClick={() => setSelectedId(item.id)} className="px-6 py-2 bg-primary text-primary-foreground rounded-lg font-semibold hover:shadow-lg transition-all">
                     View Details
                   </button>
                 </div>
@@ -80,6 +81,37 @@ export default function Gallery() {
             </div>
           ))}
         </div>
+
+        {selectedId && (
+          <div
+            className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4"
+            onClick={() => setSelectedId(null)}
+          >
+            <div
+              className="relative max-w-4xl max-h-[90vh] w-full"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {selectedId && (
+                <>
+                  <img
+                    src={galleryImages.find((img) => img.id === selectedId)?.image || "/placeholder.svg"}
+                    alt={galleryImages.find((img) => img.id === selectedId)?.title}
+                    className="w-full h-full object-contain rounded-lg"
+                  />
+                  <button
+                    onClick={() => setSelectedId(null)}
+                    className="absolute top-4 right-4 w-10 h-10 bg-primary rounded-full flex items-center justify-center text-primary-foreground font-bold text-xl hover:shadow-lg transition-all"
+                  >
+                    ×
+                  </button>
+                  <h3 className="absolute bottom-4 left-4 text-2xl font-bold text-primary bg-black/60 px-4 py-2 rounded-lg">
+                    {galleryImages.find((img) => img.id === selectedId)?.title}
+                  </h3>
+                </>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </section>
   )

@@ -2,12 +2,19 @@
 
 import { Check } from "lucide-react"
 
+const scrollToSection = (sectionId: string) => {
+  const element = document.getElementById(sectionId)
+  if (element) {
+    element.scrollIntoView({ behavior: "smooth" })
+  }
+}
+
 const pricingPlans = [
   {
     name: "Exterior",
     price: "$50-70",
     description: "Perfect for maintaining your car's exterior",
-    features: ["Wash & dry", "Clay bar treatment", "Wax application", "Tire shine", "Window cleaning"],
+    features: ["Wash & dry", "Wax application", "Tire shine", "Door jambs", "Window cleaning"],
     highlighted: false,
   },
   {
@@ -24,7 +31,7 @@ const pricingPlans = [
     features: [
       "Full exterior detail",
       "Full interior detail",
-      "Ceramic coating",
+      "Tire shine & Door jambs",
       "Premium protection",
       "Satisfaction guaranteed",
     ],
@@ -75,6 +82,7 @@ export default function Pricing() {
               </ul>
 
               <button
+                onClick={() => scrollToSection("contact")}
                 className={`w-full py-3 rounded-lg font-semibold transition-all duration-300 ${
                   plan.highlighted
                     ? "bg-primary text-primary-foreground hover:shadow-lg glow-gold-hover"

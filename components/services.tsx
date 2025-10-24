@@ -2,13 +2,20 @@
 
 import { Sparkles, Droplet, Package } from "lucide-react"
 
+const scrollToSection = (sectionId: string) => {
+  const element = document.getElementById(sectionId)
+  if (element) {
+    element.scrollIntoView({ behavior: "smooth" })
+  }
+}
+
 const services = [
   {
     icon: Sparkles,
     title: "Exterior Detailing",
     description: "Professional exterior cleaning and protection for a showroom shine",
     price: "$50-70",
-    features: ["Wheel cleaning", "Trim restoration"],
+    features: ["Wheel cleaning", "Trim restoration", "Tire shine", "Door jambs"],
   },
   {
     icon: Droplet,
@@ -64,7 +71,7 @@ export default function Services() {
                   ))}
                 </ul>
 
-                <button className="w-full py-3 bg-primary text-primary-foreground rounded-lg font-semibold hover:shadow-lg glow-gold-hover transition-all duration-300">
+                <button onClick={() => scrollToSection("contact")} className="w-full py-3 bg-primary text-primary-foreground rounded-lg font-semibold hover:shadow-lg glow-gold-hover transition-all duration-300">
                   Get a Quote
                 </button>
               </div>
