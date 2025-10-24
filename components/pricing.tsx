@@ -24,7 +24,7 @@ const pricingPlans = [
     features: [
       "Full exterior detail",
       "Full interior detail",
-      "Ceramic coating",
+      "Tire shine & Door jambs",
       "Premium protection",
       "Satisfaction guaranteed",
     ],
