@@ -45,10 +45,10 @@ export default function Hero() {
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-          <button className="px-8 py-4 bg-primary text-primary-foreground rounded-lg font-bold text-lg hover:shadow-lg glow-gold-hover transition-all duration-300 transform hover:scale-105">
+          <button onClick={() => scrollToSection("contact")} className="px-8 py-4 bg-primary text-primary-foreground rounded-lg font-bold text-lg hover:shadow-lg glow-gold-hover transition-all duration-300 transform hover:scale-105">
             Get a Quote
           </button>
-          <button className="px-8 py-4 border-2 border-primary text-primary rounded-lg font-bold text-lg hover:bg-primary/10 transition-all duration-300">
+          <button onClick={() => scrollToSection("services")} className="px-8 py-4 border-2 border-primary text-primary rounded-lg font-bold text-lg hover:bg-primary/10 transition-all duration-300">
             Learn More
           </button>
         </div>
