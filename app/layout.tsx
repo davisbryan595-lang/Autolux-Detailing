@@ -28,10 +28,10 @@ export default function RootLayout({
       </body>
     </html>
     
-    import PageLoader from "@/components/page-loader";
+    
 
 export default function Loading() {
-  return <Loader />;
+  return <PageLoader />;
 }
 
   )
