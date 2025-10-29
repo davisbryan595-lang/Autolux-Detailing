@@ -22,7 +22,7 @@ const services = [
     title: "Interior Detailing",
     description: "Deep cleaning and conditioning of your vehicle's interior",
     price: "$70-80",
-    features: ["Carpet shampooing", "Leather conditioning", "Odor removal", "Stain treatment"],
+    features: ["Carpet shampooing", "Leather conditioning", "Odor removal", "Light Stain treatment"],
   },
   {
     icon: Package,
