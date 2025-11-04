@@ -12,21 +12,21 @@ const scrollToSection = (sectionId: string) => {
 const pricingPlans = [
   {
     name: "Exterior",
-    price: "$50-70",
+    price: "$70-90",
     description: "Perfect for maintaining your car's exterior",
     features: ["Wash & dry", "Wax application", "Tire shine", "Door jambs", "Window cleaning"],
     highlighted: false,
   },
   {
     name: "Interior",
-    price: "$70-80",
+    price: "$90-110",
     description: "Deep clean for a fresh interior",
     features: ["Vacuum & shampoo", "Leather conditioning", "Dashboard cleaning", "Odor elimination", "Stain removal"],
     highlighted: true,
   },
   {
     name: "Bundle",
-    price: "$100-120",
+    price: "$140-160",
     description: "Complete transformation inside & out",
     features: [
       "Full exterior detail",

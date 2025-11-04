@@ -6,9 +6,9 @@ import { CreditCard } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
 
 const services = [
-  { id: "exterior", name: "Exterior Detailing", price: 60 },
-  { id: "interior", name: "Interior Detailing", price: 75 },
-  { id: "bundle", name: "Bundle Package", price: 110 },
+  { id: "exterior", name: "Exterior Detailing", price: 80 },
+  { id: "interior", name: "Interior Detailing", price: 100 },
+  { id: "bundle", name: "Bundle Package", price: 150 },
 ]
 
 export default function BookingForm() {
