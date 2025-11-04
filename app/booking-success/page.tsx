@@ -4,19 +4,43 @@ import { useEffect, useState } from "react"
 import { useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { CheckCircle } from "lucide-react"
+import Stripe from "stripe"
 
 export default function BookingSuccess() {
   const searchParams = useSearchParams()
   const sessionId = searchParams.get("session_id")
   const [loading, setLoading] = useState(true)
+  const [notificationSent, setNotificationSent] = useState(false)
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false)
-    }, 2000)
+    const sendNotification = async () => {
+      if (sessionId) {
+        try {
+          const response = await fetch("/api/send-notification", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ sessionId }),
+          })
 
-    return () => clearTimeout(timer)
-  }, [])
+          if (response.ok) {
+            setNotificationSent(true)
+          }
+        } catch (error) {
+          console.error("Failed to send notification:", error)
+        }
+      }
+
+      const timer = setTimeout(() => {
+        setLoading(false)
+      }, 2000)
+
+      return () => clearTimeout(timer)
+    }
+
+    sendNotification()
+  }, [sessionId])
 
   if (loading) {
     return (
