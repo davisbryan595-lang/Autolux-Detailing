@@ -1,47 +1,40 @@
 import { NextRequest, NextResponse } from "next/server"
 import Stripe from "stripe"
+import nodemailer from "nodemailer"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
-  apiVersion: "2024-10-28.acacia",
+  apiVersion: "2024-10.28.acacia",
 })
 
-// Function to send SMS via Twilio
-async function sendSMS(phoneNumber: string, message: string) {
-  const accountSid = process.env.TWILIO_ACCOUNT_SID
-  const authToken = process.env.TWILIO_AUTH_TOKEN
-  const twilioPhoneNumber = process.env.TWILIO_PHONE_NUMBER
+async function sendEmail(to: string, subject: string, htmlContent: string) {
+  const gmailUser = process.env.GMAIL_USER
+  const gmailAppPassword = process.env.GMAIL_APP_PASSWORD
 
-  if (!accountSid || !authToken || !twilioPhoneNumber) {
-    console.warn(
-      "Twilio credentials not configured. SMS notification skipped."
-    )
+  if (!gmailUser || !gmailAppPassword) {
+    console.warn("Gmail credentials not configured. Email notification skipped.")
     return false
   }
 
   try {
-    const response = await fetch(`https://api.twilio.com/2010-04-01/Accounts/${accountSid}/Messages.json`, {
-      method: "POST",
-      headers: {
-        Authorization: `Basic ${Buffer.from(`${accountSid}:${authToken}`).toString("base64")}`,
-        "Content-Type": "application/x-www-form-urlencoded",
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: gmailUser,
+        pass: gmailAppPassword,
       },
-      body: new URLSearchParams({
-        To: phoneNumber,
-        From: twilioPhoneNumber,
-        Body: message,
-      }).toString(),
     })
 
-    if (!response.ok) {
-      const error = await response.text()
-      console.error("Twilio SMS error:", error)
-      return false
-    }
+    await transporter.sendMail({
+      from: gmailUser,
+      to: to,
+      subject: subject,
+      html: htmlContent,
+    })
 
-    console.log("SMS sent successfully to", phoneNumber)
+    console.log("Email sent successfully to", to)
     return true
   } catch (error) {
-    console.error("Failed to send SMS:", error)
+    console.error("Failed to send email:", error)
     return false
   }
 }
@@ -64,40 +57,58 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Retrieve the session details from Stripe
     const session = await stripe.checkout.sessions.retrieve(sessionId)
 
-    const ownerPhoneNumber = process.env.OWNER_PHONE_NUMBER
+    const ownerEmail = process.env.OWNER_EMAIL || "Cjm96887@gmail.com"
 
-    if (!ownerPhoneNumber) {
-      return NextResponse.json(
-        {
-          success: false,
-          message:
-            "Owner phone number not configured. Please set OWNER_PHONE_NUMBER environment variable.",
-        },
-        { status: 200 }
-      )
+    const customerInfo = {
+      name: customerName || session.metadata?.customerName || "N/A",
+      phone: customerPhone || session.metadata?.customerPhone || "N/A",
+      email: customerEmail || session.metadata?.customerEmail || "N/A",
+      service:
+        serviceName || session.metadata?.service || "Car Detailing",
+      amount: ((session.amount_total || 0) / 100).toFixed(2),
     }
 
-    // Create notification message for owner
-    const notificationMessage = `New Detailing Booking! 
-Service: ${serviceName || session.metadata?.service || "Car Detailing"}
-Customer: ${customerName || session.metadata?.customerName || "N/A"}
-Phone: ${customerPhone || session.metadata?.customerPhone || "N/A"}
-Email: ${customerEmail || session.metadata?.customerEmail || "N/A"}
-Amount: $${(session.amount_total || 0) / 100}
+    const emailContent = `
+      <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+        <h2 style="color: #d4af37;">New Detailing Booking Received!</h2>
+        
+        <div style="background-color: #f9f9f9; padding: 20px; border-radius: 8px; margin: 20px 0;">
+          <h3 style="color: #d4af37; margin-top: 0;">Customer Details</h3>
+          <p><strong>Name:</strong> ${customerInfo.name}</p>
+          <p><strong>Phone:</strong> <a href="tel:${customerInfo.phone}" style="color: #d4af37; text-decoration: none;">${customerInfo.phone}</a></p>
+          <p><strong>Email:</strong> <a href="mailto:${customerInfo.email}" style="color: #d4af37; text-decoration: none;">${customerInfo.email}</a></p>
+        </div>
 
-Call them to confirm the appointment.`
+        <div style="background-color: #f9f9f9; padding: 20px; border-radius: 8px; margin: 20px 0;">
+          <h3 style="color: #d4af37; margin-top: 0;">Service Details</h3>
+          <p><strong>Service:</strong> ${customerInfo.service}</p>
+          <p><strong>Amount Paid:</strong> $${customerInfo.amount}</p>
+          <p><strong>Session ID:</strong> <code style="background: #eee; padding: 2px 6px;">${sessionId}</code></p>
+        </div>
 
-    // Send SMS to owner
-    const smsSent = await sendSMS(ownerPhoneNumber, notificationMessage)
+        <div style="background-color: #fff3cd; padding: 15px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #d4af37;">
+          <strong>Action Required:</strong> Please contact the customer at the phone number above to confirm the appointment date and time.
+        </div>
+
+        <p style="color: #666; font-size: 12px; margin-top: 30px;">
+          This is an automated notification from your AutoLux Detailing booking system.
+        </p>
+      </div>
+    `
+
+    const emailSent = await sendEmail(
+      ownerEmail,
+      `New Booking: ${customerInfo.service} - ${customerInfo.name}`,
+      emailContent
+    )
 
     return NextResponse.json({
-      success: smsSent,
-      message: smsSent
+      success: emailSent,
+      message: emailSent
         ? "Notification sent successfully"
-        : "Notification system not configured",
+        : "Email system not configured",
     })
   } catch (error) {
     console.error("Error sending notification:", error)
