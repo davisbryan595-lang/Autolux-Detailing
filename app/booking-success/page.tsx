@@ -4,7 +4,6 @@ import { useEffect, useState } from "react"
 import { useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { CheckCircle } from "lucide-react"
-import Stripe from "stripe"
 
 export default function BookingSuccess() {
   const searchParams = useSearchParams()
