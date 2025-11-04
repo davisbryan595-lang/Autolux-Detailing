@@ -1,40 +1,62 @@
 import { NextRequest, NextResponse } from "next/server"
 import Stripe from "stripe"
-import nodemailer from "nodemailer"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
   apiVersion: "2024-10.28.acacia",
 })
 
-async function sendEmail(to: string, subject: string, htmlContent: string) {
-  const gmailUser = process.env.GMAIL_USER
-  const gmailAppPassword = process.env.GMAIL_APP_PASSWORD
-
-  if (!gmailUser || !gmailAppPassword) {
-    console.warn("Gmail credentials not configured. Email notification skipped.")
-    return false
-  }
+async function sendEmailViaFormsubmit(
+  customerName: string,
+  customerPhone: string,
+  customerEmail: string,
+  serviceName: string,
+  amount: string,
+  sessionId: string
+) {
+  const ownerEmail = "Cjm96887@gmail.com"
 
   try {
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        user: gmailUser,
-        pass: gmailAppPassword,
+    const response = await fetch("https://formsubmit.co/ajax/" + ownerEmail, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
       },
+      body: JSON.stringify({
+        subject: `New Booking: ${serviceName} - ${customerName}`,
+        message: `
+New Detailing Booking Received!
+
+CUSTOMER DETAILS:
+Name: ${customerName}
+Phone: ${customerPhone}
+Email: ${customerEmail}
+
+SERVICE DETAILS:
+Service: ${serviceName}
+Amount Paid: $${amount}
+Session ID: ${sessionId}
+
+ACTION REQUIRED:
+Please contact the customer at the phone number above to confirm the appointment date and time.
+
+This is an automated notification from your AutoLux Detailing booking system.
+        `,
+        _captcha: "false",
+      }),
     })
 
-    await transporter.sendMail({
-      from: gmailUser,
-      to: to,
-      subject: subject,
-      html: htmlContent,
-    })
+    const data = await response.json()
 
-    console.log("Email sent successfully to", to)
-    return true
+    if (data.success) {
+      console.log("Email sent successfully via Formsubmit")
+      return true
+    } else {
+      console.error("Formsubmit error:", data)
+      return false
+    }
   } catch (error) {
-    console.error("Failed to send email:", error)
+    console.error("Failed to send email via Formsubmit:", error)
     return false
   }
 }
@@ -59,8 +81,6 @@ export async function POST(request: NextRequest) {
 
     const session = await stripe.checkout.sessions.retrieve(sessionId)
 
-    const ownerEmail = process.env.OWNER_EMAIL || "Cjm96887@gmail.com"
-
     const customerInfo = {
       name: customerName || session.metadata?.customerName || "N/A",
       phone: customerPhone || session.metadata?.customerPhone || "N/A",
@@ -70,45 +90,20 @@ export async function POST(request: NextRequest) {
       amount: ((session.amount_total || 0) / 100).toFixed(2),
     }
 
-    const emailContent = `
-      <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-        <h2 style="color: #d4af37;">New Detailing Booking Received!</h2>
-        
-        <div style="background-color: #f9f9f9; padding: 20px; border-radius: 8px; margin: 20px 0;">
-          <h3 style="color: #d4af37; margin-top: 0;">Customer Details</h3>
-          <p><strong>Name:</strong> ${customerInfo.name}</p>
-          <p><strong>Phone:</strong> <a href="tel:${customerInfo.phone}" style="color: #d4af37; text-decoration: none;">${customerInfo.phone}</a></p>
-          <p><strong>Email:</strong> <a href="mailto:${customerInfo.email}" style="color: #d4af37; text-decoration: none;">${customerInfo.email}</a></p>
-        </div>
-
-        <div style="background-color: #f9f9f9; padding: 20px; border-radius: 8px; margin: 20px 0;">
-          <h3 style="color: #d4af37; margin-top: 0;">Service Details</h3>
-          <p><strong>Service:</strong> ${customerInfo.service}</p>
-          <p><strong>Amount Paid:</strong> $${customerInfo.amount}</p>
-          <p><strong>Session ID:</strong> <code style="background: #eee; padding: 2px 6px;">${sessionId}</code></p>
-        </div>
-
-        <div style="background-color: #fff3cd; padding: 15px; border-radius: 8px; margin: 20px 0; border-left: 4px solid #d4af37;">
-          <strong>Action Required:</strong> Please contact the customer at the phone number above to confirm the appointment date and time.
-        </div>
-
-        <p style="color: #666; font-size: 12px; margin-top: 30px;">
-          This is an automated notification from your AutoLux Detailing booking system.
-        </p>
-      </div>
-    `
-
-    const emailSent = await sendEmail(
-      ownerEmail,
-      `New Booking: ${customerInfo.service} - ${customerInfo.name}`,
-      emailContent
+    const emailSent = await sendEmailViaFormsubmit(
+      customerInfo.name,
+      customerInfo.phone,
+      customerInfo.email,
+      customerInfo.service,
+      customerInfo.amount,
+      sessionId
     )
 
     return NextResponse.json({
       success: emailSent,
       message: emailSent
         ? "Notification sent successfully"
-        : "Email system not configured",
+        : "Failed to send notification",
     })
   } catch (error) {
     console.error("Error sending notification:", error)
